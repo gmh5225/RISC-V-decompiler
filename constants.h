@@ -1,6 +1,7 @@
 #pragma once
 
 #include <bitset>
+#include <vector>
 
 #define ELF32_ST_BIND(i)   ((i)>>4)
 #define ELF32_ST_TYPE(i)   ((i)&0xf)
