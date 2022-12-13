@@ -4,7 +4,23 @@
         
 ### Compile failed (build log):
 ```
-clang: error: no input files
+In file included from /home/runner/work/spbsu-comp-arch22-lab3-lait1103/spbsu-comp-arch22-lab3-lait1103/InstructionParser.cpp:1:
+In file included from ../InstructionParser.h:3:
+../constants.h:13:20: error: no template named 'vector' in namespace 'std'
+using Bytes = std::vector<Byte>;
+              ~~~~~^
+In file included from /home/runner/work/spbsu-comp-arch22-lab3-lait1103/spbsu-comp-arch22-lab3-lait1103/InstructionParser.cpp:1:
+In file included from ../InstructionParser.h:4:
+../bitsReader.h:41:16: error: unknown type name 'Bytes'
+    BitsReader(Bytes &&bytes) : source(bytes) {}
+               ^
+../bitsReader.h:57:5: error: unknown type name 'Bytes'
+    Bytes source = {};
+    ^
+/home/runner/work/spbsu-comp-arch22-lab3-lait1103/spbsu-comp-arch22-lab3-lait1103/InstructionParser.cpp:91:13: warning: format specifies type 'unsigned int' but the argument has type 'Byte4' (aka 'bitset<32>') [-Wformat]
+            instruction);
+            ^~~~~~~~~~~
+1 warning and 3 errors generated.
 
 ```
 
