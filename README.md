@@ -5,10 +5,6 @@
         
 ### Compile complited (build log, can be empty):
 ```
-/home/runner/work/spbsu-comp-arch22-lab3-lait1103/spbsu-comp-arch22-lab3-lait1103/InstructionParser.cpp:91:13: warning: format specifies type 'unsigned int' but the argument has type 'Byte4' (aka 'bitset<32>') [-Wformat]
-            instruction);
-            ^~~~~~~~~~~
-1 warning generated.
 
 ```
 
