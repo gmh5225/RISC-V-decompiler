@@ -85,7 +85,7 @@ bool InstructionParser::checkSuccess(Byte4 instruction, std::vector<Instruction>
 
 void InstructionParser::parsInstruction(Byte4 instruction, uint address) {
     if (address2FunctionName.count(address))
-        fprintf(out, "%08x   <%s>:\n", address,
+        fprintf(out, "%08x    <%s>:\n", address,
                 address2FunctionName[address].c_str());
     fprintf(out, "   %05x:\t%08x\t", address,
             (uint)instruction.to_ulong());
