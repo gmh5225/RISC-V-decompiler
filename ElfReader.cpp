@@ -11,39 +11,38 @@ ElfReader::ElfReader(std::ifstream &in, FILE *out_) : out(out_), instructionPars
 }
 
 std::string ElfReader::isValid() {
-    if (byteReader.getByte4(0x00) != reversedELFMagicConstant)
+    if (byteReader.getByte4(reversedELFMagicConstantOffset) != reversedELFMagicConstant)
         return "File is incorrect (magic number does not match).";
 
-    if (byteReader[0x04] != 1) return "File is not in 32 bit format."; //e_ident[EI_CLASS]
-    if (byteReader[0x05] != 1) return "File is not in little endian."; //e_ident[EI_DATA]
-    if (byteReader[0x06] != 1) return "File is not in the original and current version of ELF."; //e_ident[EI_VERSION]
-    if (byteReader.getByte2(0x12) != 0xF3) return "File's target ISA is not RISC-V."; //e_ident[EI_VERSION]
+    if (byteReader[bitnessOffset] != bitnessIs32) return "File is not in 32 bit format.";
+    if (byteReader[endianOffset] != endianIsLittle) return "File is not in little endian.";
+    if (byteReader[currentVersionOffset] != isCurrentVersion)
+        return "File is not in the original and current version of ELF.";
+    if (byteReader.getByte2(targetISAOffset) != RISCVIsTargetISA) return "File's target ISA is not RISC-V.";
 
     return "";
 }
 
 void ElfReader::parseSectionHeaders() {
-    e_shoff = byteReader.getByte4(0x20);
-    e_shnum = byteReader.getByte2(0x30);
-    e_shstrndx = byteReader.getByte2(0x32);
+    e_shoff = byteReader.getByte4(e_shoff_offset);
+    e_shnum = byteReader.getByte2(e_shnum_offset);
+    e_shstrndx = byteReader.getByte2(e_shstrndx_offset);
 
     sectionHeaders.resize(e_shnum);
 
     parseSectionHeader(e_shstrndx);
 
-
-    for (uint i = 0; i < e_shnum; i++)
-        parseSectionHeader(i);
+    for (uint i = 0; i < e_shnum; i++) parseSectionHeader(i);
 }
 
 void ElfReader::parseSectionHeader(uint index) {
     uint currentOffset = e_shoff + index * sectionHeaderSize;
     SectionHeader &sectionHeader = sectionHeaders[index];
 
-    sectionHeader.sh_name = byteReader.getByte4(currentOffset + 0x00);
-    sectionHeader.sh_addr = byteReader.getByte4(currentOffset + 0x0C);
-    sectionHeader.sh_offset = byteReader.getByte4(currentOffset + 0x10);
-    sectionHeader.sh_size = byteReader.getByte4(currentOffset + 0x14);
+    sectionHeader.sh_name = byteReader.getByte4(currentOffset + sh_name_offset);
+    sectionHeader.sh_addr = byteReader.getByte4(currentOffset + sh_addr_offset);
+    sectionHeader.sh_offset = byteReader.getByte4(currentOffset + sh_offset_offset);
+    sectionHeader.sh_size = byteReader.getByte4(currentOffset + sh_size_offset);
 
     sectionHeader.name = getSectionName(sectionHeader.sh_name, e_shstrndx);
 }
@@ -60,8 +59,7 @@ std::string ElfReader::getSectionName(uint offset, uint sectionIndex) {
 }
 
 uint ElfReader::findTabIndex(const std::string &sectionName) {
-    for (int i = 0; i < e_shnum; i++)
-        if (sectionHeaders[i].name == sectionName) return i;
+    for (int i = 0; i < e_shnum; i++) if (sectionHeaders[i].name == sectionName) return i;
     return -1;
 }
 
@@ -122,7 +120,11 @@ void ElfReader::printSymbols() {
 }
 
 void ElfReader::process() {
-    isValid();
+    std::string error = isValid();
+    if (!error.empty()) {
+        std::cout << "Error!" + error;
+        return;
+    }
 
     parseSectionHeaders();
 

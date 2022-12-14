@@ -88,38 +88,33 @@ void InstructionParser::parsInstruction(Byte4 instruction, uint address) {
         fprintf(out, "%08x   <%s>:\n", address,
                 address2FunctionName[address].c_str());
     fprintf(out, "   %05x:\t%08x\t", address,
-            instruction);
-
+            (uint)instruction.to_ulong());
 
     std::vector<Instruction> accessibleInstructions1;
     std::bitset<7> opcode = getBits<6, 0, 32>(instruction);
-    for (auto &com: instructions) {
+    for (auto &com: instructions)
         if (com.opcode == opcode) accessibleInstructions1.push_back(com);
-    }
 
     if (checkSuccess(instruction, accessibleInstructions1, address)) return;
 
     std::vector<Instruction> accessibleInstructions2;
     std::bitset<3> func3 = getBits<14, 12, 32>(instruction);
-    for (auto &com: accessibleInstructions1) {
+    for (auto &com: accessibleInstructions1)
         if (com.func3 == func3) accessibleInstructions2.push_back(com);
-    }
 
     if (checkSuccess(instruction, accessibleInstructions2, address)) return;
 
     std::vector<Instruction> accessibleInstructions3;
     std::bitset<7> func7 = getBits<31, 25, 32>(instruction);
-    for (auto &com: accessibleInstructions2) {
+    for (auto &com: accessibleInstructions2)
         if (com.func7 == func7) accessibleInstructions3.push_back(com);
-    }
 
     if (checkSuccess(instruction, accessibleInstructions3, address)) return;
 
     std::vector<Instruction> accessibleInstructions4;
     std::bitset<1> bit20 = getBits<20, 20, 32>(instruction);
-    for (auto &com: accessibleInstructions3) {
+    for (auto &com: accessibleInstructions3)
         if (com.bit20 == bit20) accessibleInstructions4.push_back(com);
-    }
 
     if (checkSuccess(instruction, accessibleInstructions4, address)) return;
 }

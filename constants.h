@@ -56,7 +56,28 @@ const uint16_t SHN_COMMON = 0xfff2;
 const uint16_t SHN_XINDEX = 0xffff;
 const uint16_t SHN_HIRESERVE = 0xffff;
 
+const uint reversedELFMagicConstantOffset = 0x00;
 const uint reversedELFMagicConstant = 0x464C457F;
+const uint bitnessOffset = 0x04;
+const uint bitnessIs32 = 1;
+const uint endianOffset = 0x05;
+const uint endianIsLittle = 1;
+const uint currentVersionOffset = 0x06;
+const uint isCurrentVersion = 1;
+const uint targetISAOffset = 0x12;
+const uint RISCVIsTargetISA = 0xf3;
+
+const uint e_shoff_offset = 0x20;
+const uint e_shnum_offset = 0x30;
+const uint e_shstrndx_offset = 0x32;
+
+const uint sh_name_offset = 0x00;
+const uint sh_addr_offset = 0x0C;
+const uint sh_offset_offset = 0x10;
+const uint sh_size_offset = 0x14;
+
+
+
 
 const uint symbolSizeBits = 16;
 

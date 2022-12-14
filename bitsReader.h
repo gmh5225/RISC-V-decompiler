@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include <string>
 #include "constants.h"
 
@@ -26,15 +25,13 @@ inline std::bitset<from - to + 1> getBits(std::bitset<srcSize> bits) {
 }
 
 template<uint size>
-inline int32_t convert2signed(std::bitset<size> num){
+inline int32_t convert2signed(std::bitset<size> num) {
     int32_t result = num.to_ulong();
     int pow = 1;
-    for(int i = 0; i < size; i++) pow *= 2;
-    if(num[size - 1]) result -= pow;
+    for (int i = 0; i < size; i++) pow *= 2;
+    if (num[size - 1]) result -= pow;
     return result;
 }
-
-
 
 class BitsReader {
 public:

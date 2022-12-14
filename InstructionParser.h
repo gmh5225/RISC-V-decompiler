@@ -4,7 +4,6 @@
 #include "bitsReader.h"
 #include <unordered_map>
 #include <array>
-#include <vector>
 #include <string>
 #include <fstream>
 
